@@ -8,31 +8,34 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
+
 function Project() {
-  let navigate = useNavigate()
-  const projects = [
-    {
-      id: 1,
-      name: "Web Development Project",
-      description: "This project is for Wed development team",
-    },
-    {
-      id: 2,
-      name: "HealthCare Project",
-      description: "This project is for Healthcare team",
-    },
-    {
-      id: 3,
-      name: "Finance Project",
-      description: "This project is for Finance team",
-    },
-  ]
+  const navigate = useNavigate()
+  const [projects, setProjects] = useState([])
+
+
+  function getProjects(){
+    fetch('http://localhost:8787/projects')
+    .then((data) => data.json())
+    .then(projectsResponse=> {
+      console.log(projectsResponse)
+      setProjects(projectsResponse)
+    })
+  }
+  
+  useEffect(() => {
+    getProjects()
+  }, [])
+
 
   function redirectToProject(projectID: number) {
     navigate(`/projects/${projectID}`)
   }
+
+
   return (
     <div className="flex gap-4 p-6">
       {projects.map((project) => {
